@@ -44,10 +44,10 @@ export default {
   width: 100%;
   align-items: center;
   padding: 20px 0;
-  justify-content: space-around;
+  justify-content: space-between;
   .logo {
-    span {
-      font-family: Rosario;
+    a span {
+      font-family: "Rosario", sans-serif;
       font-size: 22px;
       font-weight: 700;
       line-height: 26.66px;
@@ -75,10 +75,14 @@ export default {
       text-align: left;
       text-underline-position: from-font;
       text-decoration-skip-ink: none;
-
+      &:hover i {
+        color: #e11c4b;
+        transition: 0.3s;
+      }
       i {
-        font-size: 20px;
+        font-size: 14px;
         margin-bottom: 2px;
+        color: #8d8d8d;
       }
     }
   }

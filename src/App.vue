@@ -1,31 +1,45 @@
 <template>
-  <AppHeader />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="conteiner">
+    <AppTopBar />
+    <AppHeader />
+    <AppBottomBar />
+    <router-view />
+  </div>
 </template>
 
 <script>
 import AppHeader from "./components/AppHeader.vue";
-import HelloWorld from "./components/HelloWorld.vue";
-
+import AppTopBar from "./components/AppTopBar.vue";
+import AppBottomBar from "./components/AppBottomBar.vue";
 export default {
   name: "App",
   components: {
-    HelloWorld,
     AppHeader,
+    AppTopBar,
+    AppBottomBar
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rosario:wght@400;500;700&display=swap");
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto" sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
 a {
   text-decoration: none;
+}
+
+.conteiner {
+  margin: 0 auto;
+  padding: 0 5%;
+  max-width: 1200px;
+  width: 100%;
 }
 </style>
