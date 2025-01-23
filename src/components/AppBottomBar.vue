@@ -1,73 +1,50 @@
 <template>
   <div class="navigation-wrapper">
-    <button
-      class="scroll-btn left"
-      @click="scrollLeft"
-      v-if="canScrollLeft"
-    >
+    <button class="scroll-btn left" @click="scrollLeft" v-if="canScrollLeft">
       <i class="fas fa-chevron-left"></i>
     </button>
     <div class="navigation" ref="menu" @scroll="checkScroll">
-      <li>
-        <router-link to="/" class="nav-link">
-          <i class="fas fa-percentage"></i>
-          Акции
-        </router-link>
-        <router-link to="/smartphones" class="nav-link">
-          <i class="fas fa-mobile-alt"></i>
-          Смартфоны
-        </router-link>
-        <router-link to="/laptops" class="nav-link">
-          <i class="fas fa-laptop"></i>
-          Ноутбуки
-        </router-link>
-        <router-link to="/tvs" class="nav-link">
-          <i class="fas fa-tv"></i>
-          Телевизоры
-        </router-link>
-        <router-link to="/videotech" class="nav-link">
-          <i class="fas fa-video"></i>
-          Видеотехника
-        </router-link>
-        <router-link to="/headphones" class="nav-link">
-          <i class="fas fa-headphones"></i>
-          Наушники
-        </router-link>
-        <router-link to="/headphones" class="nav-link">
-          <i class="fas fa-headphones"></i>
-          Гейминг
-        </router-link>
-        <router-link to="/headphones" class="nav-link">
-          <i class="fas fa-headphones"></i>
-          Умные часы
-        </router-link>
-        <router-link to="/headphones" class="nav-link">
-          <i class="fas fa-headphones"></i>
-          Моноблоки
-        </router-link>
-        <router-link to="/headphones" class="nav-link">
-          <i class="fas fa-headphones"></i>
-          Планшеты
+      <li v-for="item in navigationItems" :key="item.path">
+        <router-link :to="item.path" class="nav-link" :class="{ active: isActive(item.path) }">
+          <i :class="[item.icon, 'nav-icon', { visible: isActive(item.path) }]"></i>
+          {{ item.label }}
         </router-link>
       </li>
     </div>
-    <button
-      class="scroll-btn right"
-      @click="scrollRight"
-      v-if="canScrollRight"
-    >
+    <button class="scroll-btn right" @click="scrollRight" v-if="canScrollRight">
       <i class="fas fa-chevron-right"></i>
     </button>
   </div>
 </template>
 
 <script>
+import { useRoute } from "vue-router";
+
 export default {
   name: "AppBottomBar",
+  setup() {
+    const route = useRoute();
+
+    const isActive = (path) => route.path === path;
+
+    return { route, isActive };
+  },
   data() {
     return {
       canScrollLeft: false,
-      canScrollRight: true,
+      canScrollRight: false,
+      navigationItems: [
+        { path: "/", label: "Акции", icon: "fas fa-percentage" },
+        { path: "/smartphones", label: "Смартфоны", icon: "fas fa-mobile-alt" },
+        { path: "/laptops", label: "Ноутбуки", icon: "fas fa-laptop" },
+        { path: "/tvs", label: "Телевизоры", icon: "fas fa-tv" },
+        { path: "/videotech", label: "Видеотехника", icon: "fas fa-video" },
+        { path: "/headphones", label: "Наушники", icon: "fas fa-headphones" },
+        { path: "/gaming", label: "Гейминг", icon: "fas fa-gamepad" },
+        { path: "/smartwatches", label: "Умные часы", icon: "fas fa-watch" },
+        { path: "/monoblocks", label: "Моноблоки", icon: "fas fa-desktop" },
+        { path: "/tablets", label: "Планшеты", icon: "fas fa-tablet-alt" },
+      ],
     };
   },
   methods: {
@@ -79,12 +56,18 @@ export default {
     },
     checkScroll() {
       const menu = this.$refs.menu;
-      this.canScrollLeft = menu.scrollLeft > 0;
-      this.canScrollRight =  menu.scrollWidth - menu.clientWidth > menu.scrollLeft;
+      const { scrollLeft, scrollWidth, clientWidth } = menu;
+
+      this.canScrollLeft = scrollLeft > 0;
+      this.canScrollRight = Math.ceil(scrollLeft + clientWidth) < scrollWidth;
     },
   },
   mounted() {
     this.checkScroll();
+    window.addEventListener("resize", this.checkScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.checkScroll);
   },
 };
 </script>
@@ -147,62 +130,38 @@ export default {
   }
 
   li {
-    width: 100%;
     display: flex;
-    justify-content: space-around;
-    gap: 10px;
-    margin: 0 45px;
-    i{
-    display: none;
-    }
-  }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 20px;
+      color: #333;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: Roboto;
+      font-size: 16px;
 
-  .nav-link {
-    display: flex;
-    cursor: pointer;
-    position: relative;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 20px;
-    color: #333;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 18.75px;
-    text-align: left;
-    text-underline-position: from-font;
-    text-decoration-skip-ink: none;
-    gap: 5px;
-    align-items: center;
+      .nav-icon {
+        margin-right: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
 
-    &:hover {
-      background-color: #e11c4b;
-      color: #fff;
-    }
+      .nav-icon.visible {
+        opacity: 1;
+      }
 
-    &.active {
-      background-color: #e11c4b;
-      color: #fff;
+      &.active {
+        background-color: #e11c4b;
+        color: #fff;
 
-      &::after {
-        content: "\f00c";
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        position: absolute;
-        right: -10px;
-        top: 50%;
-        transform: translate(100%, -50%);
-        color: #e11c4b;
-        background: #fff;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        .nav-icon {
+          opacity: 1;
+        }
       }
     }
   }
