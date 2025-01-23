@@ -22,17 +22,28 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
+  border-bottom: solid 1px #8d8d8d;
+
   a {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: #333;
 
+    &:hover {
+      color:#e11c4b;
+      i {
+        color: #e11c4b;
+        transition: 0.3s;
+      }
+    }
   }
+
   a i {
     margin-right: 5px;
     color: #8d8d8d;
   }
+
   .topbar-left {
     display: flex;
     gap: 36px;
